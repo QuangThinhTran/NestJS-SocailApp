@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('blogs')
 export class Blog {
@@ -10,24 +11,36 @@ export class Blog {
 
     @ApiProperty()
     @IsNotEmpty()
+    @Column()
     content: string
 
-    @CreateDateColumn({
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP'
+    @ApiProperty()
+    @ManyToOne((type) => User, (user) => user.id, {
+        onDelete: 'CASCADE',
     })
-    created_at: Date
+    @JoinColumn({ name: 'user_id' })
+    user_id: number
 
-    @UpdateDateColumn({
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP'
+    @ManyToMany(() => User)
+    @JoinTable({
+        name: 'likes',
+        joinColumn: {
+            name: 'blog_id',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'user_id',
+            referencedColumnName: 'id'
+        }
     })
-    updated_at: Date
+
+    @CreateDateColumn({ type: 'timestamp' })
+    createdAt: Date
+
+    @UpdateDateColumn({ type: 'timestamp' })
+    updatedAt: Date
 
 
-    @DeleteDateColumn({
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP'
-    })
-    deleted_at: Date
+    @DeleteDateColumn({ type: 'timestamp' })
+    deletedAt: Date
 }

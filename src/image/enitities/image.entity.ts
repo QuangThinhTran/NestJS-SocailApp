@@ -6,6 +6,7 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn
 } from 'typeorm';
@@ -18,23 +19,19 @@ export class Image {
 
     @ApiProperty()
     @IsNotEmpty()
+    @Column()
+    path: string
+
+    @ApiProperty()
     @ManyToOne((type) => Blog, (blog) => blog.id, {
         onDelete: 'CASCADE',
     })
-    path: string
+    @JoinColumn({ name: 'blog_id' })
+    blog_id: number
 
-    @CreateDateColumn({
-        name: 'created_at',
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP',
-    })
+    @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
 
-    @DeleteDateColumn({
-        name: 'deleted_at',
-        type: 'timestamp',
-        nullable: true,
-        default: null,
-    })
+    @DeleteDateColumn({ type: 'timestamp' })
     deletedAt: Date;
 }

@@ -7,13 +7,14 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    JoinColumn,
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('comments')
-export class BaseEntity {
+export class Comment {
     @ApiProperty()
     @PrimaryGeneratedColumn()
     id: number;
@@ -26,32 +27,21 @@ export class BaseEntity {
     @ManyToOne((type) => User, (user) => user.id, {
         onDelete: 'CASCADE'
     })
+    @JoinColumn({ name: 'user_id' })
     user_id: number
 
     @ManyToOne((type) => Blog, (blog) => blog.id, {
         onUpdate: 'CASCADE',
     })
+    @JoinColumn({ name: 'blog_id' })
     blog_id: number
 
-    @CreateDateColumn({
-        name: 'created_at',
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP',
-    })
+    @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
 
-    @UpdateDateColumn({
-        name: 'updated_at',
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP',
-    })
+    @UpdateDateColumn({ type: 'timestamp' })
     updatedAt: Date;
 
-    @DeleteDateColumn({
-        name: 'deleted_at',
-        type: 'timestamp',
-        nullable: true,
-        default: null,
-    })
+    @DeleteDateColumn({ type: 'timestamp' })
     deletedAt: Date;
 }

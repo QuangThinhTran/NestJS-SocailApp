@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { IsEmail } from 'class-validator';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -12,33 +13,45 @@ export class User {
     name: string;
 
     @ApiProperty()
-    @Column({ unique: true })
+    @Unique(['username'])
+    @Column()
     username: string;
 
     @ApiProperty()
-    @Column({ unique: true })
+    @Unique(['email'])
+    @IsEmail()
+    @Column()
     email: string
 
     @ApiProperty()
     @Column()
     password: string
 
-    @CreateDateColumn({
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP'
-    })
-    created_at: Date
+    @ApiProperty()
+    @Column({ default: 'avatar.svg' })
+    avatar: string
 
-    @UpdateDateColumn({
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP'
+    @ManyToMany(() => User)
+    @JoinTable({
+        name: 'user_followers',
+        joinColumn: {
+            name: 'user_id',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'follower_id',
+            referencedColumnName: 'id'
+        }
     })
-    updated_at: Date
+    followers: User[]
+
+    @CreateDateColumn({ type: 'timestamp' })
+    createdAt: Date
+
+    @UpdateDateColumn({ type: 'timestamp' })
+    updatedAt: Date
 
 
-    @DeleteDateColumn({
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP'
-    })
-    deleted_at: Date
+    @DeleteDateColumn({ type: 'timestamp' })
+    deletedAt: Date
 }
