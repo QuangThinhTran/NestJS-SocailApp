@@ -16,9 +16,9 @@ dotenv.config();
     JwtModule.register({
       secret: process.env.JWT_KEY,
       signOptions: { expiresIn: '5m' },
-    })
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService, LoggerService, UserService],
 })
-export class AuthModule { }
+export class AuthModule {}

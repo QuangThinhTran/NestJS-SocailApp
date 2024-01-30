@@ -5,26 +5,26 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
-
   constructor(
     @InjectRepository(User)
-    readonly userRepository: Repository<User>
-  ) { }
+    readonly userRepository: Repository<User>,
+  ) {}
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll(): Promise<User[]> {
+    return this.userRepository.find();
   }
 
   async findOne(id: number): Promise<User> {
-    return this.userRepository.findOne({ where: { id } })
+    return this.userRepository.findOneOrFail({ where: { id } });
   }
 
   async findByUsername(username: string): Promise<User> {
-    return this.userRepository.findOne({ where: { username: username } })
+    return this.userRepository.findOneOrFail({ where: { username: username } });
   }
 
-  update(id: number, updateUserDto: User) {
-    return `This action updates a #${id} user`;
+  async update(id: number, user: User): Promise<User> {
+    await this.userRepository.update(id, user);
+    return this.userRepository.findOneOrFail({ where: { id } });
   }
 
   remove(id: number) {

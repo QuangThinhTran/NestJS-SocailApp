@@ -8,18 +8,17 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.useLogger(new LoggerService)
-  app.useGlobalPipes(new ValidationPipe)
-  app.enableCors()
-
+  app.useLogger(new LoggerService());
+  app.useGlobalPipes(new ValidationPipe());
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('Social API')
     .addBearerAuth()
     .setDescription('API Description')
-    .build()
+    .build();
 
-  const document = SwaggerModule.createDocument(app, config)
+  const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/swagger', app, document);
 
   await app.listen(3000);
