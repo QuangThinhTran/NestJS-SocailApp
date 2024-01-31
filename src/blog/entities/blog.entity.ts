@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
+import { Comment } from 'src/comment/entities/comment.entity';
 import { Image } from 'src/image/enitities/image.entity';
+import { Report } from 'src/report/entities/report.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -33,11 +35,11 @@ export class Blog {
 
   @ApiProperty()
   @IsNotEmpty()
-  @ManyToOne(() => User, (user) => user.id, {
+  @ManyToOne(() => User, (user) => user.blog, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
-  user_id: number;
+  users: User[];
 
   @ManyToMany(() => User)
   @JoinTable({
@@ -51,9 +53,14 @@ export class Blog {
       referencedColumnName: 'id',
     },
   })
+  @OneToMany(() => Image, (image) => image.blog)
+  images: Image[];
 
-  @OneToMany(() => Image, (image) => image.blog_id)
-  images: Image[]
+  @OneToMany(() => Comment, (comment) => comment.blog)
+  comments: Comment[];
+
+  @OneToMany(() => Report, (report) => report.blog)
+  reports: Report[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

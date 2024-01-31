@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import { Util } from 'src/util/util';
-import { v4 as uuid } from 'uuid'; // Random string
 
 export const multerOption = {
   fileFilter: (req: any, file: any, cb: any) => {
@@ -23,7 +22,7 @@ export const multerOption = {
       cb(null, uploadPath);
     },
     filename: (req: any, file: any, cb: any) => {
-      const nameImage = Util.createSlug(file.originalname)
+      const nameImage = Util.createSlug(file.originalname);
       cb(null, `${nameImage}`);
     },
   }),

@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
 import { Blog } from 'src/blog/entities/blog.entity';
 import {
   Column,
@@ -26,7 +25,7 @@ export class Image {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'blog_id' })
-  blog_id: number;
+  blog: number;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

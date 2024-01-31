@@ -28,9 +28,9 @@ import { join } from 'path';
     BlogModule,
     TypeOrmModule.forFeature([User, Blog]),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname , '..' , 'public'),
-      serveRoot: '/images'
-    })
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/images',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, LoggerService, UserService, BlogService],

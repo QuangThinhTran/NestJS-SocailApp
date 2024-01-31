@@ -3,10 +3,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { User } from 'src/user/entities/user.entity';
+import { Blog } from 'src/blog/entities/blog.entity';
 
 @Entity('reports')
 export class Report {
@@ -19,18 +23,17 @@ export class Report {
   @Column()
   content: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @ManyToOne(() => User, (user) => user.report, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  user: User[];
+
+  @ManyToOne(() => Blog, (blog) => blog.reports, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'blog_id' })
+  blog: Blog[];
+
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @DeleteDateColumn({
-    name: 'deleted_at',
-    type: 'timestamp',
-    nullable: true,
-    default: null,
-  })
+  @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
 }

@@ -5,6 +5,7 @@ import { User } from 'src/user/entities/user.entity';
 import { Blog } from 'src/blog/entities/blog.entity';
 import { Image } from 'src/image/enitities/image.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
+import { Report } from 'src/report/entities/report.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { Comment } from 'src/comment/entities/comment.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Blog, Image, Comment],
+      entities: [User, Blog, Image, Comment, Report],
       synchronize: process.env.DB_SYNCHRONIZE as any,
     }),
   ],

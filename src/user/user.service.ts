@@ -19,7 +19,10 @@ export class UserService {
   }
 
   async findByUsername(username: string): Promise<User> {
-    return this.userRepository.findOneOrFail({ where: { username: username } });
+    return this.userRepository.findOneOrFail({
+      where: { username: username },
+      relations: ['blog'],
+    });
   }
 
   async update(id: number, user: User): Promise<User> {

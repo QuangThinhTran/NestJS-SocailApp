@@ -3,14 +3,13 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Res,
   HttpStatus,
-  UploadedFile,
   UseInterceptors,
   UploadedFiles,
+  Put,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { Blog } from './entities/blog.entity';
@@ -22,18 +21,15 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOption } from 'src/services/multer.service';
 import { ImageService } from 'src/image/image.service';
 
-interface IFile {
-  path: Express.Multer.File
-}
-
 @Controller('blog')
 export class BlogController extends BaseController {
   constructor(
     private readonly blogService: BlogService,
     readonly imageService: ImageService,
-    readonly logger: LoggerService
+    readonly logger: LoggerService,
   ) {
     super(logger);
+    this.logger.setContext('BlogService');
   }
 
   @Post('/create')
@@ -45,7 +41,7 @@ export class BlogController extends BaseController {
   ): Promise<void> {
     try {
       const data = await this.blogService.create(blog);
-      await this.imageService.uploadImages(files, data.id)
+      await this.imageService.uploadImages(files, data.id);
 
       this.responseWithData(Messages.CREATE_SUCCESS, data, res);
     } catch (error) {
@@ -71,7 +67,7 @@ export class BlogController extends BaseController {
     return this.blogService.findBySlug(slug);
   }
 
-  @Patch(':id')
+  @Put('/update/:id')
   @UseInterceptors(FilesInterceptor('path', 8, multerOption))
   async update(
     @Param('id') id: string,
@@ -81,7 +77,7 @@ export class BlogController extends BaseController {
   ): Promise<void> {
     try {
       const data = await this.blogService.update(+id, blog);
-      await this.imageService.editImages(files, data.id)
+      await this.imageService.editImages(files, data.id);
 
       this.responseWithData(Messages.CREATE_SUCCESS, data, res);
     } catch (error) {
@@ -89,9 +85,10 @@ export class BlogController extends BaseController {
     }
   }
 
-  @Delete(':id')
+  @Delete('/delete/:id')
   async remove(@Param('id') id: string, @Res() res: Response): Promise<void> {
     try {
+      await this.blogService.findOne(+id);
       await this.blogService.remove(+id);
       this.reponseMessage(HttpStatus.OK, Messages.DELETE_SUCCESS, res);
     } catch (error) {

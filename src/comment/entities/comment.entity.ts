@@ -28,13 +28,13 @@ export class Comment {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id' })
-  user_id: number;
+  user: User;
 
   @ManyToOne(() => Blog, (blog) => blog.id, {
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'blog_id' })
-  blog_id: number;
+  blog: Blog;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

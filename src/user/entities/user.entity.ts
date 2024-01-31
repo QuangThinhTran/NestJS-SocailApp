@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, MinLength } from 'class-validator';
+import { Blog } from 'src/blog/entities/blog.entity';
+import { Report } from 'src/report/entities/report.entity';
 import {
   Column,
   CreateDateColumn,
@@ -7,6 +9,7 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
@@ -55,6 +58,12 @@ export class User {
     },
   })
   followers: User[];
+
+  @OneToMany(() => Blog, (blog) => blog.users)
+  blog: Blog[];
+
+  @OneToMany(() => Report, (report) => report.user)
+  report: Report[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

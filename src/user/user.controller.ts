@@ -20,6 +20,7 @@ export class UserController extends BaseController {
     readonly logger: LoggerService,
   ) {
     super(logger);
+    this.logger.setContext('UserService');
   }
 
   @Get(':username')

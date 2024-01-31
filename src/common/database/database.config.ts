@@ -4,6 +4,7 @@ import { User } from 'src/user/entities/user.entity';
 import { Blog } from 'src/blog/entities/blog.entity';
 import { Image } from 'src/image/enitities/image.entity';
 import { Comment } from 'src/comment/entities/comment.entity';
+import { Report } from 'src/report/entities/report.entity';
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ const databaseOptions: DataSourceOptions = {
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   synchronize: <any>process.env.DB_SYNCHRONIZE,
-  entities: [User, Blog, Image, Comment],
+  entities: [User, Blog, Image, Comment, Report],
   migrations: ['src/database/migrations/*.ts'],
   migrationsRun: true,
 };
