@@ -19,12 +19,11 @@ export class AppController extends BaseController {
     this.logger.setContext('Home');
   }
 
-  @Get()
-  async home(@Res() res: Response): Promise<void> {
+  @Get('/blogs')
+  async getBlogs(@Res() res: Response): Promise<void> {
     try {
-      const users = await this.userService.findAll();
       const blogs = await this.blogService.findAll();
-      this.responseWithData('', { users, blogs }, res);
+      this.responseWithData('', blogs, res);
     } catch (error) {
       this.responseExeption(error);
     }
