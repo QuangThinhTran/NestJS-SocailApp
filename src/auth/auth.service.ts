@@ -32,4 +32,16 @@ export class AuthService {
       token: this.JWT.sign(auth),
     };
   }
+
+  async verifyPassword(oldPassword: string, user: User): Promise<boolean> {
+    const verifyPassword = await bcrypt.compare(oldPassword, user.password);
+    if (!verifyPassword) {
+      return false;
+    }
+    return true;
+  }
+
+  async updatePassword(newPassword: string): Promise<Auth> {
+    return this.authRepository.save({ password: newPassword });
+  }
 }

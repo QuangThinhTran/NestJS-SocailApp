@@ -16,6 +16,13 @@ import { UserModule } from './user/user.module';
 import { BlogModule } from './blog/blog.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { RatingService } from './rating/rating.service';
+import { RatingController } from './rating/rating.controller';
+import { WorkshopModule } from './workshop/workshop.module';
+import { WorkshopService } from './workshop/workshop.service';
+import { Workshop } from './workshop/entities/workshop.entity';
+import { PivotModule } from './pivot/pivot.module';
+import { CommentChildModule } from './comment/comment_child/commentChild.module';
 
 @Module({
   imports: [
@@ -26,13 +33,23 @@ import { join } from 'path';
     DatabaseModule,
     UserModule,
     BlogModule,
-    TypeOrmModule.forFeature([User, Blog]),
+    CommentChildModule,
+    TypeOrmModule.forFeature([User, Blog, Workshop]),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/images',
     }),
+    WorkshopModule,
+    PivotModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, LoggerService, UserService, BlogService],
+  controllers: [AppController, RatingController],
+  providers: [
+    AppService,
+    LoggerService,
+    UserService,
+    BlogService,
+    RatingService,
+    WorkshopService,
+  ],
 })
 export class AppModule {}

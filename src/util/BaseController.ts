@@ -5,7 +5,7 @@ import { LoggerService } from 'src/services/logger.service';
 export class BaseController {
   constructor(readonly logger: LoggerService) {}
 
-  reponseMessage(status: number, message: string, @Res() res: Response) {
+  responseMessage(status: number, message: string, @Res() res: Response) {
     res.status(status).send({
       message: message,
       status: status,
@@ -35,13 +35,13 @@ export class BaseController {
   }
 
   responseOK(message: string, @Res() res: Response) {
-    res.status(HttpStatus.NOT_FOUND).send({
+    res.status(HttpStatus.OK).send({
       message: message,
       status: HttpStatus.OK,
     });
   }
 
-  responseExeption(error: Error) {
+  responseException(error: Error) {
     this.logger.error(error.message);
     throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
   }

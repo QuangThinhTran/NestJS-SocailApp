@@ -1,15 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  Res,
+  Get,
   HttpStatus,
-  UseInterceptors,
-  UploadedFiles,
+  Param,
+  Post,
   Put,
+  Res,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
 import { Blog } from './entities/blog.entity';
@@ -45,7 +45,7 @@ export class BlogController extends BaseController {
 
       this.responseWithData(Messages.CREATE_SUCCESS, data, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 
@@ -62,7 +62,7 @@ export class BlogController extends BaseController {
       }
       this.responseWithData('', data, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
     return this.blogService.findBySlug(slug);
   }
@@ -81,7 +81,7 @@ export class BlogController extends BaseController {
 
       this.responseWithData(Messages.CREATE_SUCCESS, data, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 
@@ -90,9 +90,9 @@ export class BlogController extends BaseController {
     try {
       await this.blogService.findOne(+id);
       await this.blogService.remove(+id);
-      this.reponseMessage(HttpStatus.OK, Messages.DELETE_SUCCESS, res);
+      this.responseMessage(HttpStatus.OK, Messages.DELETE_SUCCESS, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 }

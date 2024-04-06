@@ -1,0 +1,9 @@
+version: 2
+authtoken: 2TIMk4NGUvGV63ORIZXYmipAzQQ_3gZeBctFLk2URrs7yP5W5
+tunnels:
+  nestjs:
+    proto: http
+    addr: 3000:3000
+#  nginx:
+#    addr: 8080
+#    proto: http

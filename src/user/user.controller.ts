@@ -1,10 +1,10 @@
 import {
-  Controller,
-  Get,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Patch,
   Res,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -29,7 +29,7 @@ export class UserController extends BaseController {
       const user = await this.userService.findByUsername(username);
       this.responseWithData('', user, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 
@@ -43,7 +43,7 @@ export class UserController extends BaseController {
       const user = await this.userService.update(+id, data);
       this.responseWithData('', user, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 

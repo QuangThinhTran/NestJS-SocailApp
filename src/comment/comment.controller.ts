@@ -33,7 +33,7 @@ export class CommentController extends BaseController {
       const data = await this.commentService.findByBlogId(id);
       this.responseWithData('', data, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 
@@ -43,7 +43,7 @@ export class CommentController extends BaseController {
       await this.commentService.create(comment);
       this.responseCreated(Messages.CREATE_SUCCESS, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 
@@ -54,7 +54,7 @@ export class CommentController extends BaseController {
       await this.commentService.delete(id);
       this.responseOK(Messages.DELETE_SUCCESS, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 }

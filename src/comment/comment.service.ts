@@ -23,7 +23,6 @@ export class CommentService {
       where: {
         blog: { id },
       },
-      relations: ['user'],
     });
   }
 

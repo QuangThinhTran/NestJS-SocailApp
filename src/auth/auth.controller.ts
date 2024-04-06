@@ -7,6 +7,8 @@ import { Response } from 'express';
 import { Messages } from 'src/common/constants/constant';
 import { Auth } from './entities/auth.entity';
 import { UserService } from 'src/user/user.service';
+import { UpdatePassword } from './entities/updatePassword.entity';
+
 @Controller('auth')
 export class AuthController extends BaseController {
   constructor(
@@ -24,7 +26,7 @@ export class AuthController extends BaseController {
       const data = await this.authService.register(user);
       this.responseWithData(Messages.REGISTER_SUCCESS, data, res);
     } catch (e) {
-      this.responseExeption(e);
+      this.responseException(e);
     }
   }
 
@@ -45,7 +47,30 @@ export class AuthController extends BaseController {
 
       this.responseWithData(Messages.LOGIN_SUCCESS, auth, res);
     } catch (e) {
-      this.responseExeption(e);
+      this.responseException(e);
+    }
+  }
+
+  @Post('/reset-password')
+  async resetPassword(
+    @Body() data: UpdatePassword,
+    @Res() res: Response,
+  ): Promise<void> {
+    try {
+      const user = await this.userService.findByUsername(data.username);
+      const verify = await this.authService.verifyPassword(
+        data.oldPassword,
+        user,
+      );
+      if (!verify) {
+        this.responseOK(Messages.VERIFY_PASSWORD, res);
+        return;
+      }
+
+      await this.authService.updatePassword(data.newPassword);
+      this.responseOK(Messages.UPDATE_SUCCESS, res);
+    } catch (e) {
+      this.responseException(e);
     }
   }
 }

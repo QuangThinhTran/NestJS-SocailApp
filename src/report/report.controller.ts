@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { ReportService } from './report.service';
 import { Report } from './entities/report.entity';
 import { BaseController } from 'src/util/BaseController';
@@ -22,7 +22,7 @@ export class ReportController extends BaseController {
       await this.reportService.create(data);
       this.responseCreated(Messages.CREATE_SUCCESS, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 
@@ -35,7 +35,7 @@ export class ReportController extends BaseController {
       const data = await this.reportService.findByBlogID(id);
       this.responseWithData('', data, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 
@@ -48,7 +48,7 @@ export class ReportController extends BaseController {
       const data = await this.reportService.findByUserID(id);
       this.responseWithData('', data, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
     }
   }
 }

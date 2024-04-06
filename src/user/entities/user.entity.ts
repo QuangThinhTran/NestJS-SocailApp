@@ -7,8 +7,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,
@@ -38,26 +36,12 @@ export class User {
 
   @ApiProperty()
   @MinLength(6)
-  @Column({ select: false })
+  @Column()
   password: string;
 
   @ApiProperty()
   @Column({ default: 'avatar.svg' })
   avatar: string;
-
-  @ManyToMany(() => User)
-  @JoinTable({
-    name: 'user_followers',
-    joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'follower_id',
-      referencedColumnName: 'id',
-    },
-  })
-  followers: User[];
 
   @OneToMany(() => Blog, (blog) => blog.users)
   blog: Blog[];

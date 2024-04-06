@@ -3,9 +3,10 @@ import { AppService } from './app.service';
 import { BaseController } from './util/BaseController';
 import { LoggerService } from './services/logger.service';
 import { UserService } from './user/user.service';
-import { BlogService } from './blog/blog.service';
 import { Response } from 'express';
 import { join } from 'path';
+import { BlogService } from './blog/blog.service';
+import { WorkshopService } from './workshop/workshop.service';
 
 @Controller()
 export class AppController extends BaseController {
@@ -13,6 +14,7 @@ export class AppController extends BaseController {
     private readonly appService: AppService,
     readonly userService: UserService,
     readonly blogService: BlogService,
+    readonly workshopService: WorkshopService,
     readonly logger: LoggerService,
   ) {
     super(logger);
@@ -25,7 +27,27 @@ export class AppController extends BaseController {
       const blogs = await this.blogService.findAll();
       this.responseWithData('', blogs, res);
     } catch (error) {
-      this.responseExeption(error);
+      this.responseException(error);
+    }
+  }
+
+  @Get('users')
+  async getUsers(@Res() res: Response): Promise<void> {
+    try {
+      const users = await this.userService.findAll();
+      this.responseWithData('', users, res);
+    } catch (error) {
+      this.responseException(error);
+    }
+  }
+
+  @Get('workshops')
+  async getWorkshops(@Res() res: Response): Promise<void> {
+    try {
+      const workshops = await this.workshopService.findAll();
+      return this.responseWithData('', workshops, res);
+    } catch (error) {
+      this.responseException(error);
     }
   }
 
@@ -33,5 +55,10 @@ export class AppController extends BaseController {
   serveImage(@Param('filename') filename: string, @Res() res: Response): void {
     const imagePath = join(__dirname, '..', 'public', filename);
     res.sendFile(imagePath);
+  }
+
+  @Get('/')
+  hello(): string {
+    return 'Hello ThinhDeptrai';
   }
 }

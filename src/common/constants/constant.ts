@@ -9,4 +9,5 @@ export enum Messages {
   DELETE_SUCCESS = 'Delete Successful',
   RESTORE_SUCCESS = 'Restore Successful',
   NOT_FOUND = 'Not Found',
+  VERIFY_PASSWORD = 'Password failed',
 }

@@ -1,7 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
-import { Blog } from 'src/blog/entities/blog.entity';
-import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -12,9 +8,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
+import { Comment } from '../../entities/comment.entity';
+import { User } from '../../../user/entities/user.entity';
 
-@Entity('comments')
-export class Comment {
+@Entity('comment_children')
+export class CommentChild {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -22,7 +22,7 @@ export class Comment {
   @ApiProperty()
   @IsNotEmpty()
   @Column()
-  comment: string;
+  content: string;
 
   @ManyToOne(() => User, (user) => user.id, {
     onDelete: 'CASCADE',
@@ -30,14 +30,11 @@ export class Comment {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Blog, (blog) => blog.id, {
-    onUpdate: 'CASCADE',
+  @ManyToOne(() => Comment, (comment) => comment.id, {
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'blog_id' })
-  blog: Blog;
-
-  // @OneToMany(() => CommentChild, (commentChild) => commentChild.comment)
-  // commentChild: CommentChild[];
+  @JoinColumn({ name: 'comment_id' })
+  comment: Comment;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
