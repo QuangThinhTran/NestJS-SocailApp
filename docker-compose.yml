@@ -4,7 +4,7 @@ networks:
     enable_ipv6: true
 services:
   database:
-    image: mysql:5.7
+    image: mysql:latest
     restart: always
     environment:
       MYSQL_DATABASE: social
