@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import { Controller, Get, Param, Res, Request, Body, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 import { BaseController } from './util/BaseController';
 import { LoggerService } from './services/logger.service';
@@ -22,7 +22,10 @@ export class AppController extends BaseController {
   }
 
   @Get('/blogs')
-  async getBlogs(@Res() res: Response): Promise<void> {
+  async getBlogs(
+    @Res() res: Response,
+    @Request() req
+  ): Promise<void> {
     try {
       const blogs = await this.blogService.findAll();
       this.responseWithData('', blogs, res);
@@ -32,10 +35,14 @@ export class AppController extends BaseController {
   }
 
   @Get('users')
-  async getUsers(@Res() res: Response): Promise<void> {
+  async getUsers(
+    @Query('username') username: string,
+    @Res() res: Response): Promise<void> {
     try {
       const users = await this.userService.findAll();
-      this.responseWithData('', users, res);
+      const result = users.filter(user => user.username !== username);
+      
+      this.responseWithData('', result, res);
     } catch (error) {
       this.responseException(error);
     }

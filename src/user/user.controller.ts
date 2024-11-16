@@ -52,20 +52,6 @@ export class UserController extends BaseController {
     }
   }
 
-  // @Put('/description/:id')
-  // async updateDescription(
-  //   @Param('id') id: string,
-  //   @Body() data: User,
-  //   @Res() res: Response,
-  // ) {
-  //   try {
-  //     const user = await this.userService.updateDescription(+id, data);
-  //     this.responseWithData('', user, res);
-  //   } catch (error) {
-  //     this.responseException(error);
-  //   }
-  // }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);

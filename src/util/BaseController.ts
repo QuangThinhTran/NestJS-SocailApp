@@ -20,10 +20,10 @@ export class BaseController {
   }
 
   responseWithData(message: string, data: any, @Res() res: Response) {
-    res.status(HttpStatus.CREATED).send({
+    res.status(HttpStatus.OK).send({
       message: message,
       data: data,
-      status: HttpStatus.CREATED,
+      status: HttpStatus.OK,
     });
   }
 

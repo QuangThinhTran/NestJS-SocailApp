@@ -10,6 +10,8 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -59,4 +61,18 @@ export class Blog {
 
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
+
+  @ManyToMany(() => User)
+  @JoinTable({
+    name: 'likes',
+    joinColumn: {
+      name: 'blog_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+  })
+  likes: User[];
 }

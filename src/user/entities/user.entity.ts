@@ -7,6 +7,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,
@@ -61,4 +63,35 @@ export class User {
 
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
+
+  @ManyToMany(() => User)
+  @JoinTable({
+    name: 'user_followers',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'follower_id',
+      referencedColumnName: 'id',
+    },
+  })
+  followers: User[];
+
+  @ManyToMany(() => User, user => user.followers)
+  following: User[];
+
+  @ManyToMany(() => Blog)
+  @JoinTable({
+    name: 'bookmarks',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'blog_id',
+      referencedColumnName: 'id',
+    },
+  })
+  bookmarks: Blog[];
 }
