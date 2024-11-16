@@ -31,7 +31,7 @@ export class Comment {
   user: User;
 
   @ManyToOne(() => Blog, (blog) => blog.id, {
-    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'blog_id' })
   blog: Blog;

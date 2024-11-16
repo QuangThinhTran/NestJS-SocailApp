@@ -7,8 +7,10 @@ import {
   Param,
   Post,
   Put,
+  Request,
   Res,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
@@ -20,28 +22,34 @@ import { Response } from 'express';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOption } from 'src/services/multer.service';
 import { ImageService } from 'src/image/image.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('blog')
 export class BlogController extends BaseController {
   constructor(
     private readonly blogService: BlogService,
     readonly imageService: ImageService,
-    readonly logger: LoggerService,
+    readonly logger: LoggerService
   ) {
     super(logger);
     this.logger.setContext('BlogService');
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('/create')
   @UseInterceptors(FilesInterceptor('path', 8, multerOption))
   async create(
     @Body() blog: Blog,
     @UploadedFiles() files: Array<Express.Multer.File>,
     @Res() res: Response,
+    @Request() req
   ): Promise<void> {
     try {
-      const data = await this.blogService.create(blog);
-      await this.imageService.uploadImages(files, data.id);
+      const data = await this.blogService.create({ ...blog, users: req.user.userId });
+      
+      if (files) {
+        await this.imageService.uploadImages(files, data.id);
+      }
 
       this.responseWithData(Messages.CREATE_SUCCESS, data, res);
     } catch (error) {

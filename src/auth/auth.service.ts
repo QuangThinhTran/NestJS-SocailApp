@@ -27,9 +27,9 @@ export class AuthService {
     }
 
     return {
-      name: user.name,
+      name: user.username,
       email: user.email,
-      token: this.JWT.sign(auth),
+      token: this.JWT.sign({ ...auth, id: user.id }),
     };
   }
 

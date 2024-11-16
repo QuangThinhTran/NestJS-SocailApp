@@ -36,3 +36,6 @@ yarn.lock
 
 # env
 .env
+
+# public
+/public

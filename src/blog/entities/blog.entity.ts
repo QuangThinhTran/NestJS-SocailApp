@@ -36,7 +36,6 @@ export class Blog {
   rating: number;
 
   @ApiProperty()
-  @IsNotEmpty()
   @ManyToOne(() => User, (user) => user.blog, {
     onDelete: 'CASCADE',
   })

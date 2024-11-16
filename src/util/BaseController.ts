@@ -23,7 +23,7 @@ export class BaseController {
     res.status(HttpStatus.CREATED).send({
       message: message,
       data: data,
-      status: HttpStatus.OK,
+      status: HttpStatus.CREATED,
     });
   }
 

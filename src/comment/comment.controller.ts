@@ -5,7 +5,9 @@ import {
   Get,
   Param,
   Post,
+  Request,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { BaseController } from 'src/util/BaseController';
@@ -13,6 +15,7 @@ import { LoggerService } from 'src/services/logger.service';
 import { Response } from 'express';
 import { Comment } from './entities/comment.entity';
 import { Messages } from 'src/common/constants/constant';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('comment')
 export class CommentController extends BaseController {
@@ -37,10 +40,12 @@ export class CommentController extends BaseController {
     }
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('/create')
-  async create(@Body() comment: Comment, @Res() res: Response): Promise<void> {
+  async create(@Body() comment: Comment, @Res() res: Response, @Request() req): Promise<void> {
     try {
-      await this.commentService.create(comment);
+      console.log(comment);
+      await this.commentService.create({ ...comment, user: req.user.userId });
       this.responseCreated(Messages.CREATE_SUCCESS, res);
     } catch (error) {
       this.responseException(error);

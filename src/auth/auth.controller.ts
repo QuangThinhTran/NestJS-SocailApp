@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { BaseController } from 'src/util/BaseController';
 import { User } from 'src/user/entities/user.entity';
@@ -8,6 +8,8 @@ import { Messages } from 'src/common/constants/constant';
 import { Auth } from './entities/auth.entity';
 import { UserService } from 'src/user/user.service';
 import { UpdatePassword } from './entities/updatePassword.entity';
+import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController extends BaseController {
@@ -15,6 +17,7 @@ export class AuthController extends BaseController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     readonly logger: LoggerService,
+    private readonly JWT: JwtService
   ) {
     super(logger);
     this.logger.setContext('AuthService');
@@ -24,7 +27,13 @@ export class AuthController extends BaseController {
   async register(@Body() user: User, @Res() res: Response): Promise<void> {
     try {
       const data = await this.authService.register(user);
-      this.responseWithData(Messages.REGISTER_SUCCESS, data, res);
+
+      const auth = {
+        username: data.username,
+        password: data.password
+      };
+
+      this.responseWithData(Messages.REGISTER_SUCCESS, {...data, token: this.JWT.sign({...auth, id: data.id})}, res);
     } catch (e) {
       this.responseException(e);
     }
@@ -35,13 +44,13 @@ export class AuthController extends BaseController {
     try {
       const user = await this.userService.findByUsername(data.username);
       if (!user) {
-        this.responseOK(Messages.LOGIN_FAILED_USERNAME, res);
+        this.responseMessage(HttpStatus.BAD_REQUEST, Messages.LOGIN_FAILED_USERNAME, res);
         return;
       }
 
       const auth = await this.authService.login(data, user);
       if (!auth) {
-        this.responseOK(Messages.LOGIN_FAILED_PASSWORD, res);
+        this.responseMessage(HttpStatus.BAD_REQUEST,Messages.LOGIN_FAILED_PASSWORD, res);
         return;
       }
 
@@ -69,6 +78,17 @@ export class AuthController extends BaseController {
 
       await this.authService.updatePassword(data.newPassword);
       this.responseOK(Messages.UPDATE_SUCCESS, res);
+    } catch (e) {
+      this.responseException(e);
+    }
+  }
+
+  @Post('/logout')
+  async logout(@Res() res: Response): Promise<void> {
+    try {
+      await res.clearCookie('jwt');
+
+      this.responseOK(Messages.LOGOUT_SUCCESS, res);
     } catch (e) {
       this.responseException(e);
     }

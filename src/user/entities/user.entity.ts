@@ -35,6 +35,10 @@ export class User {
   email: string;
 
   @ApiProperty()
+  @Column({ default: '' })
+  description: string;
+
+  @ApiProperty()
   @MinLength(6)
   @Column()
   password: string;
