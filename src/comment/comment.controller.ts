@@ -57,7 +57,6 @@ export class CommentController extends BaseController {
   @Post('/create')
   async create(@Body() comment: Comment, @Res() res: Response, @Request() req): Promise<void> {
     try {
-      console.log(comment);
       await this.commentService.create({ ...comment, user: req.user.userId });
       this.responseCreated(Messages.CREATE_SUCCESS, res);
     } catch (error) {

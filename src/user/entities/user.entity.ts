@@ -64,7 +64,7 @@ export class User {
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
 
-  @ManyToMany(() => User)
+  @ManyToMany(() => User, user => user.following)
   @JoinTable({
     name: 'user_followers',
     joinColumn: {

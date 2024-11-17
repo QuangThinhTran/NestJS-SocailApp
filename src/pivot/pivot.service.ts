@@ -39,8 +39,8 @@ export class PivotService {
   }
 
   async getFollowerCount(username: string): Promise<number> {
-    const user = await this.userRepository.findOne({ where: { username: username }, relations: ['followers'] });
-    return user.followers.length;
+    const user = await this.userRepository.findOne({ where: { username: username }, relations: ['following'] });
+    return user.following.length;
   }
 
 
@@ -57,7 +57,7 @@ export class PivotService {
     }
   }
 
-  async checkFollow(user_id: number, follower_id: number): Promise<boolean> {
+  async checkFollow(user_id: number, follower_id: number): Promise<any> {
     const user = await this.userRepository.findOne({ where: { id: user_id }, relations: ['followers'] });
     if (user.followers.find((follower) => follower.id === follower_id)) {
       return true;
