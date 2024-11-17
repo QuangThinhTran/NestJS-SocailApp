@@ -58,6 +58,20 @@ export class AppController extends BaseController {
     }
   }
 
+  @Get('search')
+  async search(
+    @Query('name') name: string,
+    @Query('email') email: string,
+    @Res() res: Response
+  ): Promise<void> {
+    try {
+      const blogs = await this.userService.search(name, email);
+      this.responseWithData('', blogs, res);
+    } catch (error) {
+      this.responseException(error);
+    }
+  }
+
   @Get(':filename')
   serveImage(@Param('filename') filename: string, @Res() res: Response): void {
     const imagePath = join(__dirname, '..', 'public', filename);

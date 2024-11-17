@@ -10,7 +10,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from './entities/user.entity';
 import { BaseController } from 'src/util/BaseController';
 import { LoggerService } from 'src/services/logger.service';
 import { Response } from 'express';

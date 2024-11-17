@@ -40,6 +40,19 @@ export class CommentController extends BaseController {
     }
   }
 
+  @Get('/detail/:id')
+  async getComment(
+    @Param('id') id: number,
+    @Res() res: Response
+  ): Promise<void> {
+    try {
+      const data = await this.commentService.find(id);
+      this.responseWithData('', data, res);
+    } catch (error) {
+      this.responseException(error);
+    }
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Post('/create')
   async create(@Body() comment: Comment, @Res() res: Response, @Request() req): Promise<void> {

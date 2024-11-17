@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { updateDescription } from './entities/update-description';
 
 @Injectable()
@@ -33,6 +33,15 @@ export class UserService {
   async update(id: number, user: updateDescription): Promise<User> {
     await this.userRepository.update(id, user);
     return this.userRepository.findOneOrFail({ where: { id } });
+  }
+
+  async search(name: string, email: string): Promise<User[]> {
+    return this.userRepository.find({
+      where: [
+        { name: Like(`%${name}%`) },
+        { email: Like(`%${email}%`) },
+      ],
+    });
   }
 
   remove(id: number) {

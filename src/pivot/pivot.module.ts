@@ -12,5 +12,6 @@ import { UserService } from 'src/user/user.service';
   imports: [TypeOrmModule.forFeature([User, Blog, Workshop])],
   controllers: [PivotController],
   providers: [PivotService, UserService, LoggerService],
+  exports: [PivotService]
 })
 export class PivotModule { }
